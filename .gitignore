@@ -12,6 +12,7 @@
 /.vscode
 /.zed
 /auth.json
+/generated/prisma
 /node_modules
 /public/build
 /public/hot
