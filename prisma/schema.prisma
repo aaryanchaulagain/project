@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum MembershipStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  emailVerified DateTime?
+  avatarUrl     String?
+  memberships   Membership[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([email])
+}
+
+model Organization {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String?
+  memberships Membership[]
+  featureFlags FeatureFlag[]
+  auditLogs   AuditLog[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([slug])
+}
+
+model Membership {
+  id             String           @id @default(cuid())
+  userId         String
+  organizationId String
+  role           UserRole         @default(MEMBER)
+  status         MembershipStatus @default(INVITED)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model FeatureFlag {
+  id             String       @id @default(cuid())
+  organizationId String?
+  key            String
+  enabled        Boolean      @default(false)
+  description    String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, key])
+  @@index([key])
+}
+
+model AuditLog {
+  id             String        @id @default(cuid())
+  actorId        String?
+  organizationId String?
+  action         String
+  entity         String
+  entityId       String?
+  metadata       Json?
+  actor          User?         @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+
+  @@index([actorId])
+  @@index([organizationId])
+  @@index([entity, entityId])
+}
