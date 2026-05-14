@@ -8,11 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: url('{{ asset('image/bg.png') }}') no-repeat center center fixed;
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: black;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 24px 16px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -104,6 +105,23 @@
         }
        
 
+        @media (max-width: 480px) {
+            .logo {
+                left: 16px;
+                font-size: 1.5rem;
+            }
+
+            .signin-card {
+                padding: 28px 20px;
+            }
+
+            .options {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
     </style>
 </head>
 
@@ -119,10 +137,10 @@
         <form class="form-container" method="POST" action="{{ route('user.signin') }}">
             @csrf
             <div class="mb-3">
-                <input type="email"name="email" class="form-control" placeholder="Email or phone number" required>
+                <input type="email" name="email" class="form-control" placeholder="Email or phone number" required>
             </div>
             <div class="mb-3">
-                <input type="password" name="password"class="form-control" placeholder="Password" required>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
             </div>
 
             <div class="options">

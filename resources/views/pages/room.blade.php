@@ -14,7 +14,7 @@
                     {{-- Room Image --}}
                     <img src="{{ $room->image
                         ? asset('uploads/rooms/' . $room->image)
-                        : asset('images/default-room.jpg') }}"
+                        : asset('images/default-room.svg') }}"
                         class="card-img-top"
                         alt="{{ $room->name }}"
                         style="height:250px; object-fit:cover;">
