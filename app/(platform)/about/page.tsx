@@ -13,5 +13,5 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function Page() {
-  return <PageShell pageKey="about" showMetrics=false showTeam=false showTestimonials=false />;
+  return <PageShell pageKey="about" showMetrics={false} showTeam={false} showTestimonials={false} />;
 }

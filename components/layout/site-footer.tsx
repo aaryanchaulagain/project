@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div className="space-y-5">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-300">INN Group Platform</p>
           <h2 className="max-w-xl text-3xl font-semibold tracking-tight">Any more questions? Feel free to write us a mail!</h2>
-          <p className="max-w-2xl text-sm leading-7 text-slate-300">We'll respond your queries immediately. {contactDetails.disclaimer}</p>
+          <p className="max-w-2xl text-sm leading-7 text-slate-300">We&apos;ll respond your queries immediately. {contactDetails.disclaimer}</p>
         </div>
         <div>
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">Explore</h3>

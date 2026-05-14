@@ -4,10 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function createAdapter() {
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    throw new Error("DATABASE_URL is required for Prisma MySQL connections.");
-  }
+  const databaseUrl = process.env.DATABASE_URL ?? "mysql://user:password@localhost:3306/inn_group_platform";
 
   const url = new URL(databaseUrl);
   return new PrismaMariaDb({

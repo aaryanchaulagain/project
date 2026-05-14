@@ -8,7 +8,7 @@ export function CtaSection() {
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-amber-300">Get in touch by mail or phone</p>
           <h2 className="mt-4 text-4xl font-semibold tracking-tight">Free personal consultation</h2>
-          <p className="mt-4 text-lg leading-8 text-slate-200">Whether you want accounting, taxation or home loans, there are no charges to you. We'll hold your hand all the way until your matter is settled.</p>
+          <p className="mt-4 text-lg leading-8 text-slate-200">Whether you want accounting, taxation or home loans, there are no charges to you. We&apos;ll hold your hand all the way until your matter is settled.</p>
           <Button asChild className="mt-8" variant="premium" size="lg"><Link href="/contact">Make an appointment</Link></Button>
         </div>
       </div>
