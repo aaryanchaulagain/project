@@ -14,9 +14,12 @@ const eslintConfig = [
   {
     ignores: [
       ".next/**",
+      "next-env.d.ts",
       "node_modules/**",
-      "public/plugins/**",
+      "public/**",
+      "resources/**",
       "src/generated/prisma/**",
+      "vite.config.js",
     ],
   },
 ];

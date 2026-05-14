@@ -1,17 +1,18 @@
 # Project Structure
 
-This scaffold uses the Next.js App Router with the application source under
-`src/` to avoid collisions with existing backend folders.
+This scaffold uses the Next.js App Router in the root `app/` directory so
+Next.js discovers route groups correctly. Shared application code lives under
+`src/`.
 
 ```txt
+app/
+  (auth)/                   Authentication routes
+  (dashboard)/              Protected product routes
+  (marketing)/              Public marketing routes
+  api/health/               Health check endpoint
+  globals.css               TailwindCSS v4 entrypoint and design tokens
+  layout.tsx                Root metadata, viewport, and providers
 src/
-  app/
-    (auth)/                 Authentication routes
-    (dashboard)/            Protected product routes
-    (marketing)/            Public marketing routes
-    api/health/             Health check endpoint
-    globals.css             TailwindCSS v4 entrypoint and design tokens
-    layout.tsx              Root metadata, viewport, and providers
   components/
     layout/                 Shared layout primitives
     providers/              App-level client providers
