@@ -30,7 +30,7 @@
 
     /* HERO SECTION */
     .hero-image {
-        background-image: url('{{ asset("image/room1.jpg") }}');
+        background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80');
         background-size: cover;
         background-position: center;
         height: 400px;
@@ -246,12 +246,12 @@
     <h2>Meet Our Developers</h2>
     <div class="dev-container">
         <div class="developer">
-            <img src="{{ asset('image/pradip.jpeg') }}" alt="Developer 1">
+            <img src="{{ asset('dist/img/user2-160x160.jpg') }}" alt="Pradip Sharma">
             <h4>Pradip Sharma</h4>
             <p>Backend Developer</p>
         </div>
         <div class="developer">
-            <img src="{{ asset('image/aryan.jpeg') }}" alt="Developer 2">
+            <img src="{{ asset('dist/img/user8-128x128.jpg') }}" alt="Aryan">
             <h4>Aryan</h4>
             <p>Frontend Developer</p>
         </div>

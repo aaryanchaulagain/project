@@ -1,20 +1,20 @@
 @extends('layout.master', ['nonav' => true, 'noFooter' => true])
 @section('monkey')
     <style>
-        body {
+        .register-page {
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #375E97, #b8bbc4);
-            margin: 0;
-            padding: 0;
+            min-height: 100vh;
+            padding: 24px 16px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
         .form-container {
             background: #fff;
-            width: 420px;
+            width: 100%;
+            max-width: 420px;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -95,10 +95,19 @@
         .submit-btn:hover {
             background: #2c4a78;
         }
-    </style>
-    </head>
 
-    <body>
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 24px 18px;
+            }
+
+            .checkbox {
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+    <div class="register-page">
         <form class="form-container" method="POST" action="{{ route('register.submit') }}">
             @csrf
             <h2>SignUp</h2>
@@ -107,13 +116,13 @@
             <input type="text" name="name" placeholder="Enter your name" required />
 
             <label>Address</label>
-            <input type="text"name="address" placeholder="Enter your address" required />
+            <input type="text" name="address" placeholder="Enter your address" required />
 
             <label>Phone Number</label>
             <input type="tel" name="phone" placeholder="98xxxxxxx" required />
 
             <label>Email</label>
-            <input type="email" name="email"placeholder="example@gmail.com" required />
+            <input type="email" name="email" placeholder="example@gmail.com" required />
             <label>Password</label>
             <input type="password" name="password" placeholder="Enter password" required />
 
@@ -124,20 +133,17 @@
             <label>Select Role</label>
             <select name="role" required>
                 <option value="" disabled selected>Select Role</option>
-                <option value="Tenant">Tenant</option>
+                <option value="tenant">Tenant</option>
                 <option value="owner">Owner</option>
             </select>
 
 
-            <div class="checkbox" style="display:flex; align-items:center; gap:10px; margin:15px 0;">
+            <div class="checkbox">
                 <input type="checkbox" required />
-                <label style="margin:0; white-space:nowrap;">I agree to all terms and conditions</label>
+                <label style="margin:0;">I agree to all terms and conditions</label>
             </div>
 
             <button type="submit" class="submit-btn">Submit</button>
         </form>
-
-
-
-    </body>
+    </div>
 @endsection

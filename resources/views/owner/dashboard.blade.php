@@ -7,7 +7,7 @@
     <div class="row">
 
         <!-- Upload Room -->
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Upload New Room</h5>
@@ -18,7 +18,7 @@
         </div>
 
         <!-- View Rooms -->
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
                     <h5 class="card-title">My Rooms</h5>
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Approval Status -->
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Approval Status</h5>

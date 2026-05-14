@@ -12,7 +12,7 @@
         <div class="card-header bg-danger text-white">
             <h4 class="mb-0">Room Management</h4>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0 table-responsive">
             <table class="table table-bordered mb-0">
                 <thead class="table-light">
                     <tr>
@@ -44,7 +44,7 @@
                             @endif
                         </td>
                         <td>
-                            <img src="{{ $room->image ? asset('/uploadsrooms/' . $room->image) : asset('images/default-room.jpg') }}"
+                            <img src="{{ $room->image ? asset('uploads/rooms/' . $room->image) : asset('images/default-room.svg') }}"
                                  alt="{{ $room->name }}" height="60">
                         </td>
                         <td>

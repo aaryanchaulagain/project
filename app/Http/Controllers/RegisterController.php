@@ -22,8 +22,8 @@ class RegisterController extends Controller
             'address' => 'required',
             'phone' => 'required',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:Tenant,owner',
-            'password' => 'required|confirmed|min:6'
+            'role' => 'required|in:tenant,owner',
+            'password' => 'required|confirmed|min:6',
         ]);
 
         User::create([

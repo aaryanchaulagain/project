@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Default room image</title>
+  <desc id="desc">A simple room illustration used when no room photo is available.</desc>
+  <rect width="800" height="500" fill="#f3f4f6"/>
+  <rect x="80" y="120" width="640" height="260" rx="24" fill="#ffffff" stroke="#d1d5db" stroke-width="8"/>
+  <rect x="130" y="255" width="540" height="90" rx="18" fill="#dc3545"/>
+  <rect x="160" y="205" width="180" height="70" rx="12" fill="#fee2e2"/>
+  <rect x="365" y="205" width="180" height="70" rx="12" fill="#fee2e2"/>
+  <rect x="115" y="345" width="40" height="55" rx="8" fill="#374151"/>
+  <rect x="645" y="345" width="40" height="55" rx="8" fill="#374151"/>
+  <circle cx="635" cy="165" r="36" fill="#fbbf24"/>
+  <path d="M175 160h170v24H175zM175 184h130v18H175z" fill="#9ca3af"/>
+  <text x="400" y="445" fill="#6b7280" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">Room photo coming soon</text>
+</svg>

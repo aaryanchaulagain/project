@@ -1,18 +1,20 @@
 <style>
-    /* Your existing styles here */
-
-    /* Move carousel caption to left */
     .carousel-caption {
         left: 5%;
         right: auto;
         text-align: left;
         transform: none;
     }
+
+    .room-carousel-image {
+        height: clamp(360px, 70vh, 643px);
+        object-fit: cover;
+    }
 </style>
 
 
 
-<div class="container-fluid " style="height: 100%p">
+<div class="container-fluid px-0">
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
@@ -26,12 +28,12 @@
             {{-- first slide --}}
             <div class="carousel-item active">
 
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="d-block w-100"
-                    alt="luxury room" style="height:643px; object-fit:cover;">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="d-block w-100 room-carousel-image"
+                    alt="luxury room">
 
 
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 style="font-weight: 800">Explore The Room<a href="/dog"
+                    <h1 style="font-weight: 800">Explore The Room<a href="{{ route('service.rooms') }}"
                             style="text-decoration:none; color:white;">
                             <i class="bi bi-arrow-right ms-2" style="font-size:2rem;"></i>
                         </a></h1>
@@ -41,10 +43,10 @@
             </div>
             {{-- second slide --}}
             <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed" class="d-block w-100"
-                    alt="modern room" style="height:643px; object-fit:cover;">
+                <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed" class="d-block w-100 room-carousel-image"
+                    alt="modern room">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 style="font-weight: 800">Explore The Room<a href="/dog"
+                    <h1 style="font-weight: 800">Explore The Room<a href="{{ route('service.rooms') }}"
                             style="text-decoration:none; color:white;">
                             <i class="bi bi-arrow-right ms-2" style="font-size:2rem;"></i>
                         </a></h1>
@@ -55,10 +57,10 @@
             {{-- third slide --}}
             <div class="carousel-item">
 
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="d-block w-100"
-                    alt="luxury room" style="height:643px; object-fit:cover;">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="d-block w-100 room-carousel-image"
+                    alt="luxury room">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 style="font-weight: 800">Explore The Room<a href="/dog"
+                    <h1 style="font-weight: 800">Explore The Room<a href="{{ route('service.rooms') }}"
                             style="text-decoration:none; color:white;">
                             <i class="bi bi-arrow-right ms-2" style="font-size:2rem;"></i>
                         </a></h1>

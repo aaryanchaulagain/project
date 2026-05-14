@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SigninController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OwnerController;
 
 
 /*
@@ -41,11 +41,17 @@ Route::post('/logout', [SigninController::class, 'logout'])->name('logout');
 |-----------------------------------
 */
 Route::middleware('auth')->group(function () {
-    Route::get('/admin', [DashboardController::class, 'home'])->name('dashboard');
-    Route::get('/owner/dashboard', function() {
-    return view('owner.dashboard');
-     })->name('owner.dashboard');
-     Route::get('/tenant/dashboard', function() { return 'Tenant Dashboard'; })->name('tenant.dashboard');
+    Route::get('/admin', function () {
+        return redirect()->route('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/owner/dashboard', function () {
+        return view('owner.dashboard');
+    })->name('owner.dashboard');
+
+    Route::get('/tenant/dashboard', function () {
+        return 'Tenant Dashboard';
+    })->name('tenant.dashboard');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -53,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
     // Owner room upload
     Route::get('/owner/room/create', [RoomController::class, 'create'])->name('owner.room.create');
     Route::post('/owner/room/store', [RoomController::class, 'store'])->name('owner.room.store');
+    Route::get('/owner/profile/{id}', [OwnerController::class, 'create'])->name('owner.profile.create');
+    Route::post('/owner/profile', [OwnerController::class, 'saveExtra'])->name('owner.save');
 
     // Owner view rooms
     Route::get('/owner/rooms', [RoomController::class, 'index'])->name('owner.room.index');
