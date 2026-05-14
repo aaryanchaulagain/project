@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum BrandKey {
+  INN_GROUP
+  ASSOCIATES
+  WEALTH
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CLOSED
+}
+
+model Brand {
+  id        String   @id @default(cuid())
+  key       BrandKey @unique
+  slug      String   @unique
+  name      String
+  domain    String
+  theme     String
+  accent    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pages        Page[]
+  services     Service[]
+  teamMembers  TeamMember[]
+  testimonials Testimonial[]
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  eyebrow     String
+  description String   @db.Text
+  metaTitle   String?
+  metaDescription String? @db.Text
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  brandId  String
+  brand    Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  sections Section[]
+
+  @@index([brandId])
+}
+
+model Section {
+  id        String   @id @default(cuid())
+  pageId    String
+  order     Int
+  label     String?
+  heading   String
+  body      String   @db.Text
+  ctaLabel  String?
+  ctaHref   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, order])
+  @@index([pageId])
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String
+  description String   @db.Text
+  icon        String
+  href        String
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  brandId String
+  brand   Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([brandId, slug])
+  @@index([brandId])
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String?  @db.Text
+  email     String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  brandId String
+  brand   Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@index([brandId])
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  quote     String   @db.Text
+  author    String
+  company   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  brandId String
+  brand   Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@index([brandId])
+}
+
+model ContactSubmission {
+  id          String     @id @default(cuid())
+  source      BrandKey
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  department  String
+  desiredTime String?
+  subject     String
+  message     String     @db.Text
+  status      LeadStatus @default(NEW)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([source])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
