@@ -1,0 +1,436 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserRole {
+  USER
+  MEMBER
+  OWNER
+  ADMIN
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  SUPPORT
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  WON
+  LOST
+  ARCHIVED
+}
+
+enum SubmissionStatus {
+  NEW
+  READ
+  RESPONDED
+  ARCHIVED
+}
+
+enum MediaAssetType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  AUDIO
+  OTHER
+}
+
+enum SettingType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}
+
+model User {
+  id                   Int                 @id @default(autoincrement())
+  name                 String              @db.VarChar(191)
+  email                String              @unique @db.VarChar(191)
+  phone                String?             @db.VarChar(50)
+  passwordHash         String?             @map("password_hash") @db.VarChar(191)
+  role                 UserRole            @default(USER)
+  isActive             Boolean             @default(true) @map("is_active")
+  emailVerifiedAt      DateTime?           @map("email_verified_at")
+  lastLoginAt          DateTime?           @map("last_login_at")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  adminProfile         Admin?
+  authoredBlogs        Blog[]              @relation("BlogAuthor")
+  authoredFaqs         FAQ[]               @relation("FaqAuthor")
+  authoredPages        Page[]              @relation("PageAuthor")
+  authoredTestimonials Testimonial[]       @relation("TestimonialAuthor")
+  contactSubmissions   ContactSubmission[]
+  leads                Lead[]              @relation("LeadOwner")
+  mediaAssets          MediaAsset[]        @relation("MediaUploader")
+  updatedSettings      Settings[]          @relation("SettingsUpdater")
+
+  @@map("users")
+}
+
+model Admin {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @unique @map("user_id")
+  displayName String?   @map("display_name") @db.VarChar(191)
+  role        AdminRole @default(EDITOR)
+  permissions Json?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admins")
+}
+
+model Brand {
+  id                 Int                 @id @default(autoincrement())
+  name               String              @db.VarChar(191)
+  slug               String              @unique @db.VarChar(191)
+  tagline            String?             @db.VarChar(255)
+  description        String?             @db.LongText
+  websiteUrl         String?             @map("website_url") @db.VarChar(255)
+  logoAssetId        Int?                @map("logo_asset_id")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  blogs              Blog[]
+  contactSubmissions ContactSubmission[]
+  faqs               FAQ[]
+  leads              Lead[]
+  logoAsset          MediaAsset?         @relation("BrandLogo", fields: [logoAssetId], references: [id], onDelete: SetNull)
+  mediaAssets        MediaAsset[]        @relation("BrandMediaAssets")
+  pages              Page[]
+  seo                SEO?
+  services           Service[]
+  testimonials       Testimonial[]
+
+  @@index([logoAssetId])
+  @@map("brands")
+}
+
+model Service {
+  id           Int           @id @default(autoincrement())
+  brandId      Int?          @map("brand_id")
+  title        String        @db.VarChar(191)
+  slug         String        @unique @db.VarChar(191)
+  summary      String?       @db.VarChar(500)
+  description  String?       @db.LongText
+  content      String?       @db.LongText
+  priceLabel   String?       @map("price_label") @db.VarChar(100)
+  iconAssetId  Int?          @map("icon_asset_id")
+  heroAssetId  Int?          @map("hero_asset_id")
+  sortOrder    Int           @default(0) @map("sort_order")
+  isFeatured   Boolean       @default(false) @map("is_featured")
+  status       ContentStatus @default(DRAFT)
+  publishedAt  DateTime?     @map("published_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  blogs        Blog[]
+  brand        Brand?        @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  faqs         FAQ[]
+  heroAsset    MediaAsset?   @relation("ServiceHero", fields: [heroAssetId], references: [id], onDelete: SetNull)
+  iconAsset    MediaAsset?   @relation("ServiceIcon", fields: [iconAssetId], references: [id], onDelete: SetNull)
+  leads        Lead[]
+  mediaAssets  MediaAsset[]  @relation("ServiceMediaAssets")
+  pages        Page[]
+  seo          SEO?
+  testimonials Testimonial[]
+
+  @@index([brandId])
+  @@index([heroAssetId])
+  @@index([iconAssetId])
+  @@index([status, publishedAt])
+  @@map("services")
+}
+
+model Page {
+  id                 Int                 @id @default(autoincrement())
+  brandId            Int?                @map("brand_id")
+  serviceId          Int?                @map("service_id")
+  parentId           Int?                @map("parent_id")
+  authorId           Int?                @map("author_id")
+  heroAssetId        Int?                @map("hero_asset_id")
+  title              String              @db.VarChar(191)
+  slug               String              @unique @db.VarChar(191)
+  template           String?             @db.VarChar(100)
+  excerpt            String?             @db.VarChar(500)
+  body               String?             @db.LongText
+  status             ContentStatus       @default(DRAFT)
+  isHomePage         Boolean             @default(false) @map("is_home_page")
+  publishedAt        DateTime?           @map("published_at")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  author             User?               @relation("PageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  brand              Brand?              @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  children           Page[]              @relation("PageHierarchy")
+  contactSubmissions ContactSubmission[]
+  faqs               FAQ[]
+  heroAsset          MediaAsset?         @relation("PageHero", fields: [heroAssetId], references: [id], onDelete: SetNull)
+  mediaAssets        MediaAsset[]        @relation("PageMediaAssets")
+  parent             Page?               @relation("PageHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  seo                SEO?
+  service            Service?            @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  @@index([authorId])
+  @@index([brandId])
+  @@index([heroAssetId])
+  @@index([parentId])
+  @@index([serviceId])
+  @@index([status, publishedAt])
+  @@map("pages")
+}
+
+model Blog {
+  id                 Int           @id @default(autoincrement())
+  brandId            Int?          @map("brand_id")
+  serviceId          Int?          @map("service_id")
+  authorId           Int?          @map("author_id")
+  coverAssetId       Int?          @map("cover_asset_id")
+  title              String        @db.VarChar(191)
+  slug               String        @unique @db.VarChar(191)
+  excerpt            String?       @db.VarChar(500)
+  content            String?       @db.LongText
+  tags               Json?
+  readingTimeMinutes Int?          @map("reading_time_minutes")
+  isFeatured         Boolean       @default(false) @map("is_featured")
+  status             ContentStatus @default(DRAFT)
+  publishedAt        DateTime?     @map("published_at")
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  author             User?         @relation("BlogAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  brand              Brand?        @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  coverAsset         MediaAsset?   @relation("BlogCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
+  mediaAssets        MediaAsset[]  @relation("BlogMediaAssets")
+  seo                SEO?
+  service            Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  @@index([authorId])
+  @@index([brandId])
+  @@index([coverAssetId])
+  @@index([serviceId])
+  @@index([status, publishedAt])
+  @@map("blogs")
+}
+
+model Lead {
+  id               Int        @id @default(autoincrement())
+  brandId          Int?       @map("brand_id")
+  serviceId        Int?       @map("service_id")
+  ownerId          Int?       @map("owner_id")
+  firstName        String     @map("first_name") @db.VarChar(100)
+  lastName         String?    @map("last_name") @db.VarChar(100)
+  email            String     @db.VarChar(191)
+  phone            String?    @db.VarChar(50)
+  company          String?    @db.VarChar(191)
+  message          String?    @db.LongText
+  budget           Decimal?   @db.Decimal(12, 2)
+  source           String?    @db.VarChar(100)
+  status           LeadStatus @default(NEW)
+  consentMarketing Boolean    @default(false) @map("consent_marketing")
+  ipAddress        String?    @map("ip_address") @db.VarChar(45)
+  userAgent        String?    @map("user_agent") @db.VarChar(500)
+  metadata         Json?
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  brand            Brand?     @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  owner            User?      @relation("LeadOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  service          Service?   @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  @@index([brandId])
+  @@index([email])
+  @@index([ownerId])
+  @@index([serviceId])
+  @@index([status])
+  @@map("leads")
+}
+
+model ContactSubmission {
+  id          Int              @id @default(autoincrement())
+  pageId      Int?             @map("page_id")
+  brandId     Int?             @map("brand_id")
+  userId      Int?             @map("user_id")
+  name        String           @db.VarChar(191)
+  email       String           @db.VarChar(191)
+  phone       String?          @db.VarChar(50)
+  subject     String?          @db.VarChar(191)
+  message     String           @db.LongText
+  status      SubmissionStatus @default(NEW)
+  ipAddress   String?          @map("ip_address") @db.VarChar(45)
+  userAgent   String?          @map("user_agent") @db.VarChar(500)
+  metadata    Json?
+  respondedAt DateTime?        @map("responded_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  brand       Brand?           @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  page        Page?            @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  user        User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([brandId])
+  @@index([email])
+  @@index([pageId])
+  @@index([status])
+  @@index([userId])
+  @@map("contact_submissions")
+}
+
+model Testimonial {
+  id            Int           @id @default(autoincrement())
+  brandId       Int?          @map("brand_id")
+  serviceId     Int?          @map("service_id")
+  createdById   Int?          @map("created_by_id")
+  avatarAssetId Int?          @map("avatar_asset_id")
+  slug          String        @unique @db.VarChar(191)
+  clientName    String        @map("client_name") @db.VarChar(191)
+  clientTitle   String?       @map("client_title") @db.VarChar(191)
+  company       String?       @db.VarChar(191)
+  quote         String        @db.LongText
+  rating        Int           @default(5)
+  sortOrder     Int           @default(0) @map("sort_order")
+  isFeatured    Boolean       @default(false) @map("is_featured")
+  status        ContentStatus @default(DRAFT)
+  publishedAt   DateTime?     @map("published_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  avatarAsset   MediaAsset?   @relation("TestimonialAvatar", fields: [avatarAssetId], references: [id], onDelete: SetNull)
+  brand         Brand?        @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  createdBy     User?         @relation("TestimonialAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  service       Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  @@index([avatarAssetId])
+  @@index([brandId])
+  @@index([createdById])
+  @@index([serviceId])
+  @@index([status, publishedAt])
+  @@map("testimonials")
+}
+
+model FAQ {
+  id          Int           @id @default(autoincrement())
+  brandId     Int?          @map("brand_id")
+  serviceId   Int?          @map("service_id")
+  pageId      Int?          @map("page_id")
+  createdById Int?          @map("created_by_id")
+  slug        String        @unique @db.VarChar(191)
+  question    String        @db.VarChar(500)
+  answer      String        @db.LongText
+  category    String?       @db.VarChar(100)
+  sortOrder   Int           @default(0) @map("sort_order")
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  brand       Brand?        @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  createdBy   User?         @relation("FaqAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  page        Page?         @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  service     Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  @@index([brandId])
+  @@index([createdById])
+  @@index([pageId])
+  @@index([serviceId])
+  @@index([status])
+  @@map("faqs")
+}
+
+model SEO {
+  id             Int         @id @default(autoincrement())
+  brandId        Int?        @unique @map("brand_id")
+  serviceId      Int?        @unique @map("service_id")
+  pageId         Int?        @unique @map("page_id")
+  blogId         Int?        @unique @map("blog_id")
+  ogImageAssetId Int?        @map("og_image_asset_id")
+  title          String?     @db.VarChar(191)
+  description    String?     @db.VarChar(500)
+  keywords       String?     @db.VarChar(500)
+  canonicalUrl   String?     @map("canonical_url") @db.VarChar(255)
+  ogTitle        String?     @map("og_title") @db.VarChar(191)
+  ogDescription  String?     @map("og_description") @db.VarChar(500)
+  noIndex        Boolean     @default(false) @map("no_index")
+  noFollow       Boolean     @default(false) @map("no_follow")
+  structuredData Json?       @map("structured_data")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+  blog           Blog?       @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  brand          Brand?      @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  ogImageAsset   MediaAsset? @relation("SeoOgImage", fields: [ogImageAssetId], references: [id], onDelete: SetNull)
+  page           Page?       @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  service        Service?    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([ogImageAssetId])
+  @@map("seo")
+}
+
+model MediaAsset {
+  id                 Int            @id @default(autoincrement())
+  brandId            Int?           @map("brand_id")
+  serviceId          Int?           @map("service_id")
+  pageId             Int?           @map("page_id")
+  blogId             Int?           @map("blog_id")
+  uploadedById       Int?           @map("uploaded_by_id")
+  filename           String         @db.VarChar(191)
+  originalName       String?        @map("original_name") @db.VarChar(191)
+  mimeType           String         @map("mime_type") @db.VarChar(100)
+  type               MediaAssetType @default(OTHER)
+  url                String         @db.VarChar(500)
+  storageKey         String?        @unique @map("storage_key") @db.VarChar(255)
+  altText            String?        @map("alt_text") @db.VarChar(255)
+  caption            String?        @db.VarChar(500)
+  sizeBytes          BigInt?        @map("size_bytes")
+  width              Int?
+  height             Int?
+  metadata           Json?
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+  blog               Blog?          @relation("BlogMediaAssets", fields: [blogId], references: [id], onDelete: SetNull)
+  brand              Brand?         @relation("BrandMediaAssets", fields: [brandId], references: [id], onDelete: SetNull)
+  coverForBlogs      Blog[]         @relation("BlogCover")
+  heroForPages       Page[]         @relation("PageHero")
+  heroForServices    Service[]      @relation("ServiceHero")
+  iconForServices    Service[]      @relation("ServiceIcon")
+  logoForBrands      Brand[]        @relation("BrandLogo")
+  ogImageForSeo      SEO[]          @relation("SeoOgImage")
+  page               Page?          @relation("PageMediaAssets", fields: [pageId], references: [id], onDelete: SetNull)
+  service            Service?       @relation("ServiceMediaAssets", fields: [serviceId], references: [id], onDelete: SetNull)
+  testimonialAvatars Testimonial[]  @relation("TestimonialAvatar")
+  uploadedBy         User?          @relation("MediaUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([blogId])
+  @@index([brandId])
+  @@index([pageId])
+  @@index([serviceId])
+  @@index([type])
+  @@index([uploadedById])
+  @@map("media_assets")
+}
+
+model Settings {
+  id          Int         @id @default(autoincrement())
+  key         String      @unique @db.VarChar(191)
+  group       String      @default("general") @db.VarChar(100)
+  label       String?     @db.VarChar(191)
+  description String?     @db.VarChar(500)
+  value       Json?
+  type        SettingType @default(STRING)
+  isPublic    Boolean     @default(false) @map("is_public")
+  updatedById Int?        @map("updated_by_id")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  updatedBy   User?       @relation("SettingsUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([group])
+  @@index([isPublic])
+  @@index([updatedById])
+  @@map("settings")
+}
