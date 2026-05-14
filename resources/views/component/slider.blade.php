@@ -31,7 +31,7 @@
 
 
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 style="font-weight: 800">Explore The Room<a href="/dog"
+                    <h1 style="font-weight: 800">Explore The Room<a href="{{ route('public.services') }}"
                             style="text-decoration:none; color:white;">
                             <i class="bi bi-arrow-right ms-2" style="font-size:2rem;"></i>
                         </a></h1>
@@ -44,7 +44,7 @@
                 <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed" class="d-block w-100"
                     alt="modern room" style="height:643px; object-fit:cover;">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 style="font-weight: 800">Explore The Room<a href="/dog"
+                    <h1 style="font-weight: 800">Explore The Room<a href="{{ route('public.services') }}"
                             style="text-decoration:none; color:white;">
                             <i class="bi bi-arrow-right ms-2" style="font-size:2rem;"></i>
                         </a></h1>
@@ -58,7 +58,7 @@
                 <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="d-block w-100"
                     alt="luxury room" style="height:643px; object-fit:cover;">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 style="font-weight: 800">Explore The Room<a href="/dog"
+                    <h1 style="font-weight: 800">Explore The Room<a href="{{ route('public.services') }}"
                             style="text-decoration:none; color:white;">
                             <i class="bi bi-arrow-right ms-2" style="font-size:2rem;"></i>
                         </a></h1>

@@ -11,9 +11,10 @@
         <div style="flex: 1 1 250px; margin-bottom: 20px;">
             <h3 style="margin-bottom: 10px;">Quick Links</h3>
             <ul style="list-style: none; padding: 0; margin: 0; display: flex; gap: 15px; flex-wrap: wrap;">
-                <li><a href="/" style="color: #fff; text-decoration: none; transition: color 0.3s;">Home</a></li>
-                <li><a href="/about" style="color: #fff; text-decoration: none; transition: color 0.3s;">About</a></li>
-                <li><a href="/dog" style="color: #fff; text-decoration: none; transition: color 0.3s;">Room</a></li>
+                <li><a href="{{ route('public.home') }}" style="color: #fff; text-decoration: none; transition: color 0.3s;">Home</a></li>
+                <li><a href="{{ route('public.about') }}" style="color: #fff; text-decoration: none; transition: color 0.3s;">About</a></li>
+                <li><a href="{{ route('public.services') }}" style="color: #fff; text-decoration: none; transition: color 0.3s;">Services</a></li>
+                <li><a href="{{ route('public.contact') }}" style="color: #fff; text-decoration: none; transition: color 0.3s;">Contact</a></li>
 
             </ul>
         </div>

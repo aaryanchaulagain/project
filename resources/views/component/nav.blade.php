@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-   <a class="navbar-brand fw-bold text-danger fs-3 ms-5"href="/">ROOMCHAA</a>
+   <a class="navbar-brand fw-bold text-danger fs-3 ms-5" href="{{ route('public.home') }}">ROOMCHAA</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
@@ -13,13 +13,16 @@
       <!-- Centered links -->
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item px-5">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link active" aria-current="page" href="{{ route('public.home') }}">Home</a>
         </li>
         <li class="nav-item px-5">
-          <a class="nav-link active" aria-current="page" href="/dog">Rooms</a>
+          <a class="nav-link active" aria-current="page" href="{{ route('public.services') }}">Services</a>
         </li>
         <li class="nav-item px-5">
-          <a class="nav-link active" aria-current="page" href="/about">AboutUs</a>
+          <a class="nav-link active" aria-current="page" href="{{ route('public.about') }}">AboutUs</a>
+        </li>
+        <li class="nav-item px-5">
+          <a class="nav-link active" aria-current="page" href="{{ route('public.contact') }}">Contact</a>
         </li>
       </ul>
 
